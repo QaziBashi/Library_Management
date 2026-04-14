@@ -3,7 +3,7 @@ import { useState } from "react";
 import img from "../assets/Images/react-book-v2.png";
 import AddBookForm from "./AddBookForm";
 import { v4 as uuidv4 } from "uuid";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaTrash } from "react-icons/fa";
 
 import { useRef } from "react";
 const BookCard = ({
@@ -64,46 +64,48 @@ const BookCard = ({
 
   return (
     <>
-      <div className="w-full h-[100vh] flex flex-wrap gap-15 bg-amber-500 p-[50px] ">
+      <div className="w-full min-h-[calc(100vh-70px)] flex flex-wrap gap-6 p-6 bg-slate-950 justify-center items-start">
         {displayBooks.map((book) => (
           <div
-            className="w-[220px] h-[350px] bg-amber-900 rounded-[10px] p-[20px] "
+            className="w-[220px] bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl hover:shadow-2xl hover:border-indigo-500/50 transition-all duration-300 group"
             key={book.id}
           >
-            <div className="flex justify-between items-center">
-              {favBookId.includes(book.id) ? (
-                <FaHeart
-                  className="cursor-pointer"
-                  onClick={() => toggleBook(book.id)}
-                />
-              ) : (
-                <FaRegHeart
-                  className="cursor-pointer"
-                  onClick={() => toggleBook(book.id)}
-                />
-              )}
-              <div
-                onClick={() => DeleteBook(book.id)}
-                className="cursor-pointer text-[18px] font-semibold"
+            <div className="flex justify-between items-center mb-3">
+              <button
+                onClick={() => toggleBook(book.id)}
+                className="p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+                title={favBookId.includes(book.id) ? "Remove from favorites" : "Add to favorites"}
               >
-                X
-              </div>
+                {favBookId.includes(book.id) ? (
+                  <FaHeart className="text-lg text-rose-500" />
+                ) : (
+                  <FaRegHeart className="text-lg text-slate-500 group-hover:text-rose-400 transition-colors" />
+                )}
+              </button>
+              <button
+                onClick={() => DeleteBook(book.id)}
+                className="p-1.5 rounded-lg hover:bg-rose-500/20 text-slate-500 hover:text-rose-500 transition-colors"
+                title="Delete book"
+              >
+                <FaTrash className="text-base" />
+              </button>
             </div>
-            <div className="flex flex-col items-center gap-[15px]">
+            <div className="flex flex-col items-center gap-3">
               <div
-                className="flex items-center justify-center w-[170px] h-[180px] "
+                className="w-[160px] h-[140px] rounded-lg overflow-hidden bg-slate-800 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-indigo-500 transition-all"
                 onClick={handleImgClick}
               >
                 {image[book.id] ? (
                   <img
                     src={URL.createObjectURL(image[book.id])}
-                    className="cursor-pointer"
+                    className="w-full h-full object-cover"
+                    alt={book.title}
                   />
                 ) : (
                   <img
-                    className=" w-[170px] h-[180px] cursor-pointer"
+                    className="w-full h-full object-cover"
                     src={book.img}
-                    alt="Book Image is Missing Due to Some Error!"
+                    alt={book.title}
                   />
                 )}
                 <input
@@ -113,19 +115,12 @@ const BookCard = ({
                   onChange={(e) => handleImgChange(e, book.id)}
                 />
               </div>
-              <div>
-                <div>
-                  <span className="font-semibold">Title: </span>
-                  {book.title}
-                </div>
-                <div>
-                  <span className="font-semibold">Author: </span>
-                  {book.author}
-                </div>
-                <div>
-                  <span className="font-semibold">genre: </span>
+              <div className="w-full text-center">
+                <h3 className="text-base font-bold text-white mb-0.5 truncate">{book.title}</h3>
+                <p className="text-sm text-slate-400 mb-1">{book.author}</p>
+                <span className="inline-block px-2 py-0.5 text-xs font-medium text-indigo-300 bg-indigo-500/20 rounded-full">
                   {book.genure}
-                </div>
+                </span>
               </div>
             </div>
           </div>
